@@ -4,11 +4,13 @@ from collections import Counter
 from datetime import date, timedelta
 from pathlib import Path
 
-from fastapi import FastAPI, File, HTTPException, UploadFile
+from fastapi import Body, FastAPI, File, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 
 from core.normalize import normalize
 from core.parse import find_balance_breaks, parse_statement
+from core.linker import apply_overrides, link_all
+from core.questions import apply_answers, build_questions, open_receivables, pair_evidence, spend_effect
 from core.recurring import detect_recurring, upcoming
 from core.rules import classify, classify_all, unresolved_groups
 
@@ -99,6 +101,41 @@ def demo_recurring():
         "subscriptions": {"count": len(subs), "monthly_total": monthly, "yearly_total": round(monthly * 12, 2)},
         "upcoming_30_days": upcoming(items, as_of + timedelta(days=1), as_of + timedelta(days=30)),
     }
+
+
+def _moneytruth(answers: dict):
+    bank, card = _load_demo()
+    txns = bank + card
+    as_of = date.fromisoformat(json.loads((DEMO_DIR / "profile.json").read_text())["as_of"])
+    rules = classify_all(txns)
+    linked = link_all(txns, rules)
+    after_link = apply_overrides(rules, linked["overrides"])
+    recurring = detect_recurring(txns, after_link, as_of)["items"]
+    questions = build_questions(txns, after_link, linked["links"], recurring)
+    final = apply_answers(after_link, questions, answers)
+    months = sorted({t.date[:7] for t in txns})
+    by_month = {m: round(sum(spend_effect(final[t.id].type, t.amount) for t in txns if t.date.startswith(m)), 2) for m in months}
+    return {
+        "questions": [{**q, "answer": answers.get(q["id"])} for q in questions],
+        "answered": sum(1 for q in questions if answers.get(q["id"])),
+        "links": [lk.to_dict() for lk in linked["links"]],
+        "evidence_pairs": pair_evidence(txns, after_link),
+        "receivables": open_receivables(linked["links"], questions, answers),
+        "held_back_rows": sum(1 for t in txns if final[t.id].type == "p2p_pending"),
+        "true_spend_by_month": by_month,
+        "still_needs_reader": [g for g in unresolved_groups(txns, rules) if g["status"] == "unknown"],
+    }
+
+
+@app.get("/demo/moneytruth")
+def demo_moneytruth_get():
+    return _moneytruth({})
+
+
+@app.post("/demo/moneytruth")
+def demo_moneytruth_post(body: dict = Body(default={})):
+    """Body: {"answers": {"q_out_ravinder_kumar": "rent", ...}}. Nothing is stored on the server."""
+    return _moneytruth(body.get("answers", {}))
 
 
 @app.get("/demo/transactions")
