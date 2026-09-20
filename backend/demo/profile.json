@@ -1,0 +1,36 @@
+{
+  "as_of": "2026-09-18",
+  "currency": "INR",
+  "safety_buffer": 2000,
+  "next_salary": {
+    "date": "2026-10-01",
+    "amount": 45000
+  },
+  "monthly_budgets": {
+    "Food & Dining": 6000,
+    "Groceries": 3000,
+    "Transport": 2500,
+    "Shopping": 4000,
+    "Entertainment": 1500
+  },
+  "goal": {
+    "name": "Laptop",
+    "target": 60000,
+    "saved": 15000,
+    "monthly_contribution": 4000
+  },
+  "pending_splits": [
+    {
+      "link_id": "movie_sep12",
+      "description": "Movie tickets for 4, paid by me",
+      "total": 1120,
+      "my_share": 280,
+      "received": 280,
+      "pending_from": [
+        "friend 2",
+        "friend 3"
+      ],
+      "pending_amount": 560
+    }
+  ]
+}

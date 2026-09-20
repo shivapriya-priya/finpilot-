@@ -1,0 +1,149 @@
+[
+  {
+    "id": "rent",
+    "name": "Rent",
+    "category": "Rent",
+    "source": "bank",
+    "cadence": "monthly",
+    "day": 5,
+    "amount": 12000,
+    "amount_type": "fixed",
+    "note": "UPI note changes then disappears"
+  },
+  {
+    "id": "phone_emi",
+    "name": "Bajaj Finance EMI",
+    "category": "EMI & Loans",
+    "source": "bank",
+    "cadence": "monthly",
+    "day": 10,
+    "amount": 5500,
+    "amount_type": "fixed"
+  },
+  {
+    "id": "gym",
+    "name": "FitZone Gym",
+    "category": "Health & Fitness",
+    "source": "bank",
+    "cadence": "monthly",
+    "day": 3,
+    "amount": 1000,
+    "amount_type": "fixed"
+  },
+  {
+    "id": "broadband",
+    "name": "Broadband",
+    "category": "Bills & Utilities",
+    "source": "bank",
+    "cadence": "monthly",
+    "day": 12,
+    "amount": 999,
+    "amount_type": "fixed"
+  },
+  {
+    "id": "electricity",
+    "name": "Electricity",
+    "category": "Bills & Utilities",
+    "source": "bank",
+    "cadence": "monthly",
+    "day": 16,
+    "amount": null,
+    "amount_type": "variable",
+    "recent_amounts": [
+      1780,
+      1910,
+      1650
+    ]
+  },
+  {
+    "id": "mobile_recharge",
+    "name": "Jio recharge",
+    "category": "Bills & Utilities",
+    "source": "bank",
+    "cadence": "every_28_days",
+    "last_date": "2026-08-25",
+    "next_due": "2026-09-22",
+    "amount": 299,
+    "amount_type": "fixed",
+    "note": "NOT monthly"
+  },
+  {
+    "id": "spotify",
+    "name": "Spotify",
+    "category": "Subscriptions",
+    "source": "bank",
+    "cadence": "monthly",
+    "day": 7,
+    "amount": 119,
+    "amount_type": "fixed"
+  },
+  {
+    "id": "netflix",
+    "name": "Netflix",
+    "category": "Subscriptions",
+    "source": "card",
+    "cadence": "monthly",
+    "day": 5,
+    "amount": 699,
+    "amount_type": "fixed",
+    "price_history": [
+      649,
+      649,
+      699,
+      699
+    ],
+    "note": "price rose from 649 to 699 in Aug"
+  },
+  {
+    "id": "icloud",
+    "name": "iCloud",
+    "category": "Subscriptions",
+    "source": "card",
+    "cadence": "monthly",
+    "day": 9,
+    "amount": 75,
+    "amount_type": "fixed"
+  },
+  {
+    "id": "canva",
+    "name": "Canva",
+    "category": "Subscriptions",
+    "source": "card",
+    "cadence": "monthly",
+    "day": 14,
+    "amount": 499,
+    "amount_type": "fixed"
+  },
+  {
+    "id": "prime_annual",
+    "name": "Amazon Prime",
+    "category": "Subscriptions",
+    "source": "card",
+    "cadence": "annual",
+    "amount": 1499,
+    "amount_type": "fixed",
+    "note": "only ONE charge in the data; cannot be detected from history"
+  },
+  {
+    "id": "savings_transfer",
+    "name": "Transfer to own savings",
+    "category": "Savings Transfer",
+    "source": "bank",
+    "cadence": "monthly",
+    "day": 2,
+    "amount": 4000,
+    "amount_type": "fixed",
+    "note": "own transfer, not spending"
+  },
+  {
+    "id": "salary",
+    "name": "Salary",
+    "category": "Salary",
+    "source": "bank",
+    "cadence": "monthly",
+    "day": 1,
+    "amount": 45000,
+    "amount_type": "fixed",
+    "direction": "income"
+  }
+]

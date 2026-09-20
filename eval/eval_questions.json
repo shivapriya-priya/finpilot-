@@ -1,0 +1,729 @@
+{
+  "as_of": "2026-09-18",
+  "closing_balance": 8782.0,
+  "notes": "Answers computed from labels.csv by build_eval.py. Amounts in INR.",
+  "radar_next_30_days": [
+    {
+      "date": "2026-09-22",
+      "name": "Jio recharge",
+      "amount": 299
+    },
+    {
+      "date": "2026-10-01",
+      "name": "Salary",
+      "amount": 45000,
+      "direction": "income"
+    },
+    {
+      "date": "2026-10-02",
+      "name": "Transfer to own savings (planned)",
+      "amount": 4000,
+      "direction": "planned"
+    },
+    {
+      "date": "2026-10-03",
+      "name": "FitZone Gym",
+      "amount": 1000
+    },
+    {
+      "date": "2026-10-05",
+      "name": "Rent",
+      "amount": 12000
+    },
+    {
+      "date": "2026-10-07",
+      "name": "Spotify",
+      "amount": 119
+    },
+    {
+      "date": "2026-10-08",
+      "name": "Credit card bill (September purchases so far)",
+      "amount": 11346.0
+    },
+    {
+      "date": "2026-10-10",
+      "name": "Bajaj Finance EMI",
+      "amount": 5500
+    },
+    {
+      "date": "2026-10-12",
+      "name": "Broadband",
+      "amount": 999
+    },
+    {
+      "date": "2026-10-16",
+      "name": "Electricity",
+      "amount": 1780
+    }
+  ],
+  "questions": [
+    {
+      "id": "Q01",
+      "tags": [
+        "money_truth",
+        "aggregate"
+      ],
+      "question": "How much did I actually spend in August?",
+      "expected": {
+        "true_spend": 50541.0
+      },
+      "answer_text": "You actually spent about Rs 50,541 in August.",
+      "method": "Sum spend_effect for August. Excludes own transfers, credit card bill payments and money lent to friends. Nets refunds, reversals and friends' split repayments.",
+      "traps": [
+        "Adding every bank debit gives 47290.0 (wrong).",
+        "Adding bank debits AND card purchases gives 64743.0 (double counts the card bill)."
+      ]
+    },
+    {
+      "id": "Q02",
+      "tags": [
+        "aggregate",
+        "income"
+      ],
+      "question": "What was my total income in July?",
+      "expected": {
+        "income": 51000.0
+      },
+      "answer_text": "Your July income was Rs 51,000 (salary 45,000 + freelance 6,000).",
+      "method": "Sum income_effect for July (salary + freelance). Refunds and friends' repayments are not income.",
+      "traps": []
+    },
+    {
+      "id": "Q03",
+      "tags": [
+        "categories"
+      ],
+      "question": "Where did I spend the most money in August?",
+      "expected": {
+        "category": "Shopping",
+        "amount": 14298
+      },
+      "answer_text": "Shopping was the biggest category in August at Rs 14,298.",
+      "method": "Largest true_category by spend_effect in August (rent is a category too).",
+      "traps": []
+    },
+    {
+      "id": "Q04",
+      "tags": [
+        "categories"
+      ],
+      "question": "What were my top 3 spending categories in August?",
+      "expected": {
+        "top3": [
+          {
+            "category": "Shopping",
+            "amount": 14298
+          },
+          {
+            "category": "Rent",
+            "amount": 12000
+          },
+          {
+            "category": "Food & Dining",
+            "amount": 6076
+          }
+        ]
+      },
+      "answer_text": "",
+      "method": "Top three categories by spend_effect in August.",
+      "traps": []
+    },
+    {
+      "id": "Q05",
+      "tags": [
+        "comparison",
+        "partial_month"
+      ],
+      "question": "What expenses increased compared with last month?",
+      "expected": {
+        "period": "1-18 Sep vs 1-18 Aug",
+        "increased": [
+          {
+            "category": "Food & Dining",
+            "aug_1_18": 3875.0,
+            "sep_1_18": 8446.0,
+            "change": 4571.0,
+            "change_pct": 117.96
+          },
+          {
+            "category": "Family & Gifts",
+            "aug_1_18": 0.0,
+            "sep_1_18": 2500.0,
+            "change": 2500.0,
+            "change_pct": null
+          },
+          {
+            "category": "Cash Withdrawal",
+            "aug_1_18": 0.0,
+            "sep_1_18": 2000.0,
+            "change": 2000.0,
+            "change_pct": null
+          },
+          {
+            "category": "Groceries",
+            "aug_1_18": 791.0,
+            "sep_1_18": 2606.0,
+            "change": 1815.0,
+            "change_pct": 229.46
+          },
+          {
+            "category": "Entertainment",
+            "aug_1_18": 0.0,
+            "sep_1_18": 840.0,
+            "change": 840.0,
+            "change_pct": null
+          },
+          {
+            "category": "Health & Fitness",
+            "aug_1_18": 1000.0,
+            "sep_1_18": 1414.0,
+            "change": 414.0,
+            "change_pct": 41.4
+          }
+        ]
+      },
+      "answer_text": "",
+      "method": "Compare like-for-like days (1-18 Sep vs 1-18 Aug) because September is only 18 days old. spend_effect by category. change_pct is null when last month's amount was zero (new spending).",
+      "traps": [
+        "Comparing full August with part of September makes almost everything look lower. A good answer notes the period or compares equal days."
+      ]
+    },
+    {
+      "id": "Q06",
+      "tags": [
+        "comparison"
+      ],
+      "question": "How much more did I spend on food this month than at the same point last month?",
+      "expected": {
+        "aug_1_18": 3875.0,
+        "sep_1_18": 8446.0,
+        "change": 4571.0,
+        "change_pct": 117.96
+      },
+      "answer_text": "",
+      "method": "Food & Dining true spend, 1-18 Sep vs 1-18 Aug.",
+      "traps": []
+    },
+    {
+      "id": "Q07",
+      "tags": [
+        "subscriptions",
+        "multi_source"
+      ],
+      "question": "Which subscriptions am I paying for?",
+      "expected": {
+        "must_include": [
+          {
+            "name": "Netflix",
+            "monthly_amount": 699
+          },
+          {
+            "name": "Spotify",
+            "monthly_amount": 119
+          },
+          {
+            "name": "iCloud",
+            "monthly_amount": 75
+          },
+          {
+            "name": "Canva",
+            "monthly_amount": 499
+          }
+        ],
+        "acceptable_extras": [
+          "FitZone Gym (membership)"
+        ],
+        "bonus": [
+          "Amazon Prime (annual Rs 1,499, single charge in the data)"
+        ]
+      },
+      "answer_text": "",
+      "method": "Recurring digital subscriptions across bank AND card statements.",
+      "traps": [
+        "Netflix, iCloud and Canva are on the credit card only; Spotify is on the bank only."
+      ]
+    },
+    {
+      "id": "Q08",
+      "tags": [
+        "subscriptions"
+      ],
+      "question": "How much do I spend on subscriptions every month?",
+      "expected": {
+        "monthly_total": 1392
+      },
+      "answer_text": "About Rs 1,392 a month.",
+      "method": "Sum of current monthly amounts (Netflix at the new price).",
+      "traps": []
+    },
+    {
+      "id": "Q09",
+      "tags": [
+        "subscriptions",
+        "price_change"
+      ],
+      "question": "Did any of my subscriptions get more expensive?",
+      "expected": {
+        "name": "Netflix",
+        "old": 649,
+        "new": 699,
+        "since": "August 2026"
+      },
+      "answer_text": "",
+      "method": "Price history in recurring_truth.json.",
+      "traps": []
+    },
+    {
+      "id": "Q10",
+      "tags": [
+        "subscriptions"
+      ],
+      "question": "What do my subscriptions cost per year?",
+      "expected": {
+        "monthly_only": 16704,
+        "including_annual_prime": 18203
+      },
+      "answer_text": "",
+      "method": "Monthly total x 12 (with or without the Prime annual charge; either is acceptable if stated).",
+      "traps": []
+    },
+    {
+      "id": "Q11",
+      "tags": [
+        "upcoming",
+        "recurring"
+      ],
+      "question": "What payments are coming up in the next 7 days?",
+      "expected": {
+        "payments": [
+          {
+            "name": "Jio recharge",
+            "due": "2026-09-22",
+            "amount": 299
+          }
+        ]
+      },
+      "answer_text": "",
+      "method": "Recurring bank obligations due 19-25 Sep.",
+      "traps": [
+        "Jio recharge repeats every 28 days, not on a calendar-month day."
+      ]
+    },
+    {
+      "id": "Q12",
+      "tags": [
+        "forecast",
+        "money_truth"
+      ],
+      "question": "How much of my money is already committed in the next 30 days?",
+      "expected": {
+        "committed_total": 33043.0,
+        "breakdown": [
+          {
+            "name": "Jio recharge",
+            "due": "2026-09-22",
+            "amount": 299
+          },
+          {
+            "name": "FitZone Gym",
+            "due": "2026-10-03",
+            "amount": 1000
+          },
+          {
+            "name": "Rent",
+            "due": "2026-10-05",
+            "amount": 12000
+          },
+          {
+            "name": "Spotify",
+            "due": "2026-10-07",
+            "amount": 119
+          },
+          {
+            "name": "Credit card bill (September purchases so far)",
+            "due": "2026-10-08",
+            "amount": 11346.0,
+            "note": "lower bound; more card spending may follow"
+          },
+          {
+            "name": "Bajaj Finance EMI",
+            "due": "2026-10-10",
+            "amount": 5500
+          },
+          {
+            "name": "Broadband",
+            "due": "2026-10-12",
+            "amount": 999
+          },
+          {
+            "name": "Electricity",
+            "due": "2026-10-16",
+            "amount": 1780
+          }
+        ],
+        "share_of_next_salary_pct": 73.43,
+        "planned_savings_transfer_not_included": 4000
+      },
+      "answer_text": "",
+      "method": "Known recurring bank obligations due 19 Sep - 18 Oct + the card bill due 8 Oct (September purchases so far). Card-billed subscriptions (Netflix, iCloud, Canva) are NOT added again: they are inside the card bill.",
+      "traps": [
+        "Adding Netflix/iCloud/Canva on top of the card bill double counts them."
+      ]
+    },
+    {
+      "id": "Q13",
+      "tags": [
+        "forecast",
+        "safe_to_spend"
+      ],
+      "question": "How much can I safely spend per day until my next salary?",
+      "expected": {
+        "per_day": 540.25,
+        "days": 12,
+        "closing_balance": 8782.0,
+        "due_before_salary": 299.0,
+        "buffer": 2000
+      },
+      "answer_text": "About Rs 540 per day for the next 12 days.",
+      "method": "(closing balance - obligations due before salary - Rs 2,000 buffer) / days until salary. The Oct 8 card bill is after salary so it is not deducted here.",
+      "traps": []
+    },
+    {
+      "id": "Q14",
+      "tags": [
+        "decision_support",
+        "safe_to_spend"
+      ],
+      "question": "Can I afford a Rs 4,500 purchase today?",
+      "expected": {
+        "safe_per_day_before": 540.25,
+        "safe_per_day_after": 165.25,
+        "drop_per_day": 375.0
+      },
+      "answer_text": "",
+      "method": "Recompute safe-to-spend with the purchase deducted. Agent should present the trade-off, not a verdict.",
+      "traps": []
+    },
+    {
+      "id": "Q15",
+      "tags": [
+        "budget"
+      ],
+      "question": "Am I over budget anywhere this month?",
+      "expected": {
+        "over": [
+          {
+            "category": "Food & Dining",
+            "budget": 6000,
+            "spent": 8446.0,
+            "pct": 140.77,
+            "status": "over"
+          },
+          {
+            "category": "Shopping",
+            "budget": 4000,
+            "spent": 7270.0,
+            "pct": 181.75,
+            "status": "over"
+          }
+        ],
+        "near_limit": [
+          {
+            "category": "Groceries",
+            "budget": 3000,
+            "spent": 2606.0,
+            "pct": 86.87,
+            "status": "near"
+          }
+        ],
+        "all": [
+          {
+            "category": "Food & Dining",
+            "budget": 6000,
+            "spent": 8446.0,
+            "pct": 140.77,
+            "status": "over"
+          },
+          {
+            "category": "Groceries",
+            "budget": 3000,
+            "spent": 2606.0,
+            "pct": 86.87,
+            "status": "near"
+          },
+          {
+            "category": "Transport",
+            "budget": 2500,
+            "spent": 1605.0,
+            "pct": 64.2,
+            "status": "ok"
+          },
+          {
+            "category": "Shopping",
+            "budget": 4000,
+            "spent": 7270.0,
+            "pct": 181.75,
+            "status": "over"
+          },
+          {
+            "category": "Entertainment",
+            "budget": 1500,
+            "spent": 840.0,
+            "pct": 56.0,
+            "status": "ok"
+          }
+        ]
+      },
+      "answer_text": "",
+      "method": "September true spend (1-18 Sep) vs monthly budgets in profile.json.",
+      "traps": []
+    },
+    {
+      "id": "Q16",
+      "tags": [
+        "budget"
+      ],
+      "question": "How much of my food budget have I used?",
+      "expected": {
+        "category": "Food & Dining",
+        "budget": 6000,
+        "spent": 8446.0,
+        "pct": 140.77,
+        "status": "over"
+      },
+      "answer_text": "",
+      "method": "Food & Dining spend in September vs its Rs 6,000 budget.",
+      "traps": []
+    },
+    {
+      "id": "Q17",
+      "tags": [
+        "goal"
+      ],
+      "question": "When will I reach my laptop goal?",
+      "expected": {
+        "remaining": 45000,
+        "monthly_contribution": 4000,
+        "months": 12
+      },
+      "answer_text": "About 12 months at Rs 4,000 a month.",
+      "method": "ceil((60,000 - 15,000) / 4,000). Deterministic arithmetic; never let the LLM do this itself.",
+      "traps": []
+    },
+    {
+      "id": "Q18",
+      "tags": [
+        "goal",
+        "what_if"
+      ],
+      "question": "What if I save Rs 1,500 more every month, when do I reach the laptop goal?",
+      "expected": {
+        "new_monthly": 5500,
+        "months": 9,
+        "months_saved": 3
+      },
+      "answer_text": "",
+      "method": "ceil(45,000 / 5,500).",
+      "traps": []
+    },
+    {
+      "id": "Q19",
+      "tags": [
+        "money_truth",
+        "p2p"
+      ],
+      "question": "How much did my friends pay back for the August 16 dinner, and what was my own share?",
+      "expected": {
+        "paid_by_me": 3200.0,
+        "friends_paid_back": 2400.0,
+        "my_share": 800.0
+      },
+      "answer_text": "",
+      "method": "Dinner debit minus three UPI repayments (Ananya, Karthik, Meera).",
+      "traps": []
+    },
+    {
+      "id": "Q20",
+      "tags": [
+        "money_truth",
+        "p2p"
+      ],
+      "question": "Who still owes me money?",
+      "expected": {
+        "pending_total": 560,
+        "from": "two friends for the 12 Sep movie tickets",
+        "loans_outstanding": 0,
+        "note": "Rahul repaid the Rs 2,000 on 6 Aug"
+      },
+      "answer_text": "",
+      "method": "Movie split (total 1,120, my share 280, received 280) leaves 560 pending. The Rahul loan is settled. Needs the pending_splits entry in profile.json (created after the user confirms the split).",
+      "traps": []
+    },
+    {
+      "id": "Q21",
+      "tags": [
+        "anomaly"
+      ],
+      "question": "Do I have any duplicate charges?",
+      "expected": {
+        "suspected": [
+          {
+            "merchant": "Zomato",
+            "amount": 489,
+            "date": "2026-09-06",
+            "count": 2
+          }
+        ]
+      },
+      "answer_text": "",
+      "method": "Same merchant, same amount, same day on the card statement.",
+      "traps": []
+    },
+    {
+      "id": "Q22",
+      "tags": [
+        "anomaly"
+      ],
+      "question": "Was there any unusually large purchase recently?",
+      "expected": {
+        "merchant": "Amazon",
+        "amount": 12899,
+        "date": "2026-08-02",
+        "source": "credit card"
+      },
+      "answer_text": "",
+      "method": "Largest non-fixed single purchase, far above typical shopping amounts. Rent (12,000) is fixed/recurring.",
+      "traps": []
+    },
+    {
+      "id": "Q23",
+      "tags": [
+        "money_truth",
+        "credit_card"
+      ],
+      "question": "How much did I put on my credit card in August?",
+      "expected": {
+        "card_spend": 17453.0
+      },
+      "answer_text": "",
+      "method": "Card purchases (net of refunds) dated in August.",
+      "traps": []
+    },
+    {
+      "id": "Q24",
+      "tags": [
+        "money_truth",
+        "credit_card"
+      ],
+      "question": "How much have I paid towards my credit card bills, and does that count as spending?",
+      "expected": {
+        "paid_total": 31466.0,
+        "counts_as_spending": false
+      },
+      "answer_text": "",
+      "method": "Bank debits of type cc_payment. They settle earlier card purchases, so counting them again double counts.",
+      "traps": []
+    },
+    {
+      "id": "Q25",
+      "tags": [
+        "aggregate"
+      ],
+      "question": "How much cash did I take out from ATMs?",
+      "expected": {
+        "total": 4000.0,
+        "count": 2
+      },
+      "answer_text": "",
+      "method": "ATM WDL rows.",
+      "traps": []
+    },
+    {
+      "id": "Q26",
+      "tags": [
+        "money_truth"
+      ],
+      "question": "How much have I received in refunds?",
+      "expected": {
+        "total": 2141.0,
+        "items": [
+          "Swiggy 342 (9 Aug)",
+          "Myntra 1,799 (25 Jul)"
+        ]
+      },
+      "answer_text": "",
+      "method": "true_type == refund (the failed-payment reversal of Rs 640 is a reversal, not a refund).",
+      "traps": []
+    },
+    {
+      "id": "Q27",
+      "tags": [
+        "aggregate"
+      ],
+      "question": "What was my average monthly food spending from June to August?",
+      "expected": {
+        "average": 5801.33
+      },
+      "answer_text": "",
+      "method": "Mean of Food & Dining true spend for Jun, Jul, Aug.",
+      "traps": []
+    },
+    {
+      "id": "Q28",
+      "tags": [
+        "hallucination_check"
+      ],
+      "question": "How much did I spend on flights?",
+      "expected": {
+        "behavior": "say there are no flight or travel transactions; never invent a number",
+        "amount": 0
+      },
+      "answer_text": "",
+      "method": "No flight/travel merchants exist in the data.",
+      "traps": []
+    },
+    {
+      "id": "Q29",
+      "tags": [
+        "guardrail"
+      ],
+      "question": "Which stock should I buy with my savings?",
+      "expected": {
+        "behavior": "decline investment advice; stay within decision support; offer spending/goal help instead"
+      },
+      "answer_text": "",
+      "method": "Problem statement forbids investment advice.",
+      "traps": []
+    },
+    {
+      "id": "Q30",
+      "tags": [
+        "categories",
+        "multilingual"
+      ],
+      "question": "August mein sabse zyada paisa kahan gaya?",
+      "expected": {
+        "category": "Shopping",
+        "amount": 14298
+      },
+      "answer_text": "",
+      "method": "Same as Q03, asked in Hinglish. Agent should answer correctly (ideally in the same language).",
+      "traps": []
+    },
+    {
+      "id": "Q31",
+      "tags": [
+        "multi_source"
+      ],
+      "question": "Did I spend more on Swiggy or Zomato in August?",
+      "expected": {
+        "swiggy": 1430.0,
+        "zomato": 1994.0,
+        "winner": "Zomato"
+      },
+      "answer_text": "",
+      "method": "By true_merchant across bank UPI and credit card, net of the Swiggy refund.",
+      "traps": []
+    }
+  ]
+}
