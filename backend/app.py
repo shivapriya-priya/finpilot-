@@ -1,5 +1,7 @@
+import json
 import os
 from collections import Counter
+from datetime import date, timedelta
 from pathlib import Path
 
 from fastapi import FastAPI, File, HTTPException, UploadFile
@@ -7,6 +9,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from core.normalize import normalize
 from core.parse import find_balance_breaks, parse_statement
+from core.recurring import detect_recurring, upcoming
 from core.rules import classify, classify_all, unresolved_groups
 
 app = FastAPI(title="FinPilot API")
@@ -77,6 +80,24 @@ def demo_classified():
         "resolved_by_rules": resolved,
         "coverage": round(resolved / len(txns), 3),
         "needs_reader_or_user": unresolved_groups(txns, res),
+    }
+
+
+@app.get("/demo/recurring")
+def demo_recurring():
+    bank, card = _load_demo()
+    txns = bank + card
+    as_of = date.fromisoformat(json.loads((DEMO_DIR / "profile.json").read_text())["as_of"])
+    found = detect_recurring(txns, classify_all(txns), as_of)
+    items = found["items"]
+    subs = [i for i in items if i.kind == "subscription" and i.direction == "out"]
+    monthly = round(sum(i.monthly_cost() for i in subs), 2)
+    return {
+        "as_of": as_of.isoformat(),
+        "items": [i.to_dict() for i in items],
+        "watchlist": found["watchlist"],
+        "subscriptions": {"count": len(subs), "monthly_total": monthly, "yearly_total": round(monthly * 12, 2)},
+        "upcoming_30_days": upcoming(items, as_of + timedelta(days=1), as_of + timedelta(days=30)),
     }
 
 

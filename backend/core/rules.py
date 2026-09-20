@@ -22,6 +22,14 @@ from .parse import Txn
 
 RESOLVE_THRESHOLD = 0.8
 
+# Category-style labels are too vague to show a user ("Utility bill" x2). For these we show the
+# cleaned name from the statement instead ("Broadband Services", "Electricity Board").
+GENERIC_NAMES = {
+    "Utility bill", "Mobile recharge", "Loan EMI", "Gym", "Pharmacy / clinic", "Cafe / restaurant",
+    "Tea / snacks", "Local grocery", "Fast food", "Supermarket", "Online shopping", "Travel booking",
+    "Train / bus", "Fuel / toll", "Streaming",
+}
+
 # (regex on the merchant key, display name, category). First match wins, so specific goes first.
 MERCHANTS: list[tuple[str, str, str]] = [
     # subscriptions
@@ -152,6 +160,8 @@ def classify(t: Txn, n: Norm | None = None) -> RuleResult:
     hit = _dictionary(n.key)
     if hit:
         name, cat = hit
+        if name in GENERIC_NAMES and n.key:
+            name = n.key.title()
         if amt < 0:
             typ, conf, rule = "expense", 0.95, "merchant_dictionary"
         elif "reversal" in flags:
