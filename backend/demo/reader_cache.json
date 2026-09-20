@@ -1,0 +1,12 @@
+{
+  "_meta": {
+    "note": "Cached Reader-agent decisions for the DEMO data, so the live demo never depends on an LLM call. Phase 2 will generate this file; until then it holds the one restaurant the rules cannot place.",
+    "source": "placeholder_until_phase_2"
+  },
+  "BARBEQUE NATION": {
+    "merchant": "Barbeque Nation",
+    "category": "Food & Dining",
+    "type": "expense",
+    "confidence": 0.9
+  }
+}

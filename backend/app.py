@@ -9,6 +9,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from core.normalize import normalize
 from core.parse import find_balance_breaks, parse_statement
+from core import calc
 from core.linker import apply_overrides, link_all
 from core.questions import apply_answers, build_questions, open_receivables, pair_evidence, spend_effect
 from core.recurring import detect_recurring, upcoming
@@ -101,6 +102,61 @@ def demo_recurring():
         "subscriptions": {"count": len(subs), "monthly_total": monthly, "yearly_total": round(monthly * 12, 2)},
         "upcoming_30_days": upcoming(items, as_of + timedelta(days=1), as_of + timedelta(days=30)),
     }
+
+
+def _reader_cache() -> dict:
+    path = DEMO_DIR / "reader_cache.json"
+    if not path.exists():
+        return {}
+    return {k: v for k, v in json.loads(path.read_text()).items() if not k.startswith("_")}
+
+
+def _ledger(answers: dict):
+    bank, card = _load_demo()
+    profile = json.loads((DEMO_DIR / "profile.json").read_text())
+    return calc.build_ledger(bank + card, profile, answers, _reader_cache())
+
+
+def _dashboard(answers: dict, afford: float, extra_monthly: float):
+    L = _ledger(answers)
+    month = L.as_of.strftime("%Y-%m")
+    first, _ = calc._month_bounds(month)
+    return {
+        "as_of": L.as_of.isoformat(),
+        "safe_to_spend": calc.safe_to_spend(L),
+        "committed_30_days": calc.committed(L),
+        "next_7_days": calc.next_days(L, 7),
+        "budgets": calc.budget_status(L, month),
+        "goal": calc.goal_projection(L),
+        "goal_what_if": calc.goal_projection(L, extra_monthly),
+        "can_i_afford": calc.can_i_afford(L, afford),
+        "subscriptions": calc.subscriptions(L),
+        "money_truth": {"this_month": calc.naive_vs_true(L, month),
+                        "last_month": calc.naive_vs_true(L, add_month_str(month, -1)),
+                        "owed_to_me": calc.owed_to_me(L)},
+        "alerts": {"duplicates": calc.duplicates(L), "unusually_large": calc.unusually_large(L)},
+        "spend_this_month": calc.spend_summary(L, first, L.as_of),
+        "questions": [{**q, "answer": answers.get(q["id"])} for q in L.questions],
+    }
+
+
+def add_month_str(month: str, n: int) -> str:
+    y, m = map(int, month.split("-"))
+    m += n
+    y += (m - 1) // 12
+    m = (m - 1) % 12 + 1
+    return f"{y:04d}-{m:02d}"
+
+
+@app.get("/demo/dashboard")
+def demo_dashboard_get(afford: float = 4500, extra_monthly: float = 1500):
+    return _dashboard({}, afford, extra_monthly)
+
+
+@app.post("/demo/dashboard")
+def demo_dashboard_post(body: dict = Body(default={})):
+    """Body: {"answers": {...}, "afford": 4500, "extra_monthly": 1500}. Nothing is stored on the server."""
+    return _dashboard(body.get("answers", {}), float(body.get("afford", 4500)), float(body.get("extra_monthly", 1500)))
 
 
 def _moneytruth(answers: dict):
